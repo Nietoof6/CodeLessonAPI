@@ -8,9 +8,11 @@ import com.mobile.codelesson.service.contracts.UserService;
 import com.mobile.codelesson.utils.JWTTools;
 import jakarta.transaction.Transactional;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public class UserServiceImpl implements UserService {
 
     private final JWTTools jwtTools;
