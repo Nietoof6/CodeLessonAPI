@@ -1,5 +1,6 @@
 package com.mobile.codelesson.service.impl;
 
+import com.mobile.codelesson.domain.dtos.req.UserRegisterDTO;
 import com.mobile.codelesson.domain.entities.Token;
 import com.mobile.codelesson.domain.entities.User;
 import com.mobile.codelesson.repositories.TokenRepository;
@@ -7,7 +8,9 @@ import com.mobile.codelesson.repositories.UserRepository;
 import com.mobile.codelesson.service.contracts.UserService;
 import com.mobile.codelesson.utils.JWTTools;
 import jakarta.transaction.Transactional;
+import org.modelmapper.ModelMapper;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,11 +21,15 @@ public class UserServiceImpl implements UserService {
     private final JWTTools jwtTools;
     private final TokenRepository tokenRepository;
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final ModelMapper modelMapper;
 
-    public UserServiceImpl(JWTTools jwtTools, TokenRepository tokenRepository, UserRepository userRepository) {
+    public UserServiceImpl(JWTTools jwtTools, TokenRepository tokenRepository, UserRepository userRepository, PasswordEncoder passwordEncoder, ModelMapper modelMapper) {
         this.jwtTools = jwtTools;
         this.tokenRepository = tokenRepository;
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
+        this.modelMapper = modelMapper;
     }
 
     @Override
@@ -82,6 +89,19 @@ public class UserServiceImpl implements UserService {
     @Override
     public User findByemail(String email) {
         return userRepository.findByEmail(email).orElse(null);
+    }
+
+    @Override
+    @Transactional(rollbackOn = Exception.class)
+    public void createUser(UserRegisterDTO user) {
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        User newUser = modelMapper.map(user, User.class);
+        userRepository.save(newUser);
+    }
+
+    @Override
+    public Boolean isPasswordOk(User user, String password) {
+        return passwordEncoder.matches(password, user.getPassword());
     }
 
 }
