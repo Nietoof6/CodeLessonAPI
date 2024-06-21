@@ -10,10 +10,7 @@ import com.mobile.codelesson.service.contracts.QuestionService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -39,8 +36,18 @@ public class QuestionController {
             Question question1 = questionService.createQuestion(question);
             lessonService.updateLesson(lesson, question1);
             return GeneralResponse.getResponse(HttpStatus.OK, "Question created successfully!");
-        }catch (Exception e) {
+        } catch (Exception e) {
             return GeneralResponse.getResponse(HttpStatus.INTERNAL_SERVER_ERROR, "Internal server error!" + e.getMessage());
+        }
+    }
+
+    @GetMapping("/all/{id}")
+    public ResponseEntity<GeneralResponse> getQuestionsByLessonId(@PathVariable String id) {
+        try {
+            List<Question> questions = questionService.getQuestionsByLessonId(id);
+            return GeneralResponse.getResponse(HttpStatus.OK, questions);
+        } catch (Exception e) {
+            return GeneralResponse.getResponse(HttpStatus.INTERNAL_SERVER_ERROR, "Internal server error!");
         }
     }
 }

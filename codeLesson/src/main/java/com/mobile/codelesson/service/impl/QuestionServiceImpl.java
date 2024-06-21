@@ -1,7 +1,9 @@
 package com.mobile.codelesson.service.impl;
 
 import com.mobile.codelesson.domain.dtos.req.QuestionNewDTO;
+import com.mobile.codelesson.domain.entities.Lesson;
 import com.mobile.codelesson.domain.entities.Question;
+import com.mobile.codelesson.repositories.LessonRepository;
 import com.mobile.codelesson.repositories.QuestionRepository;
 import com.mobile.codelesson.service.contracts.QuestionService;
 import jakarta.transaction.Transactional;
@@ -15,10 +17,12 @@ public class QuestionServiceImpl implements QuestionService {
 
     private final ModelMapper modelMapper;
     private final QuestionRepository questionRepository;
+    private final LessonRepository lessonRepository;
 
-    public QuestionServiceImpl(ModelMapper modelMapper, QuestionRepository questionRepository) {
+    public QuestionServiceImpl(ModelMapper modelMapper, QuestionRepository questionRepository, LessonRepository lessonRepository) {
         this.modelMapper = modelMapper;
         this.questionRepository = questionRepository;
+        this.lessonRepository = lessonRepository;
     }
 
     @Override
@@ -29,7 +33,13 @@ public class QuestionServiceImpl implements QuestionService {
     }
 
     @Override
-    public List<Question> getQuestionsByLessonId(String lessonTitle) {
+    public List<Question> getQuestionsByLessonTitle(String lessonTitle) {
         return questionRepository.findAllByLessonTitle(lessonTitle);
+    }
+
+    @Override
+    public List<Question> getQuestionsByLessonId(String lessonId) {
+        Lesson lesson = lessonRepository.findById(lessonId).orElse(null);
+        return lesson.getQuestions();
     }
 }

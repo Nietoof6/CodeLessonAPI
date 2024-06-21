@@ -7,5 +7,6 @@ import java.util.List;
 
 public interface QuestionService {
     Question createQuestion(QuestionNewDTO question);
+    List<Question> getQuestionsByLessonTitle(String lessonTitle);
     List<Question> getQuestionsByLessonId(String lessonId);
 }
