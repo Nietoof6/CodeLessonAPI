@@ -1,5 +1,6 @@
 package com.mobile.codelesson.service.impl;
 
+import com.mobile.codelesson.domain.dtos.req.UserProfileDTO;
 import com.mobile.codelesson.domain.dtos.req.UserRegisterDTO;
 import com.mobile.codelesson.domain.entities.Token;
 import com.mobile.codelesson.domain.entities.User;
@@ -102,6 +103,27 @@ public class UserServiceImpl implements UserService {
     @Override
     public Boolean isPasswordOk(User user, String password) {
         return passwordEncoder.matches(password, user.getPassword());
+    }
+
+    @Override
+    @Transactional(rollbackOn = Exception.class)
+    public void updatePassword(User user, String password) {
+        User user1 = userRepository.findById(user.getId()).orElse(null);
+        user1.setPassword(passwordEncoder.encode(password));
+        userRepository.save(user1);
+    }
+
+    @Override
+    public User findById(String id) {
+        return userRepository.findById(id).orElse(null);
+    }
+
+    @Override
+    public void updateProfile(User user, UserProfileDTO userProfileDTO) {
+        user.setName(userProfileDTO.getName());
+        user.setLastName(userProfileDTO.getLastName());
+        user.setEmail(userProfileDTO.getEmail());
+        userRepository.save(user);
     }
 
 }

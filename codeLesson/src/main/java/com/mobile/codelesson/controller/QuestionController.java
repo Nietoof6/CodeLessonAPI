@@ -37,7 +37,7 @@ public class QuestionController {
             lessonService.updateLesson(lesson, question1);
             return GeneralResponse.getResponse(HttpStatus.OK, "Question created successfully!");
         } catch (Exception e) {
-            return GeneralResponse.getResponse(HttpStatus.INTERNAL_SERVER_ERROR, "Internal server error!" + e.getMessage());
+            return GeneralResponse.getResponse(HttpStatus.INTERNAL_SERVER_ERROR, "Internal server error!");
         }
     }
 
