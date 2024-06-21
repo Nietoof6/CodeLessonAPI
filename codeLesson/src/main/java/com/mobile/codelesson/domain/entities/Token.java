@@ -28,7 +28,6 @@ public class Token {
     @Column(name = "active")
     private Boolean active;
 
-    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_code")
     private User user;
 

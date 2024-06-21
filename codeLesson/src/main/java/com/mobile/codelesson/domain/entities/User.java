@@ -5,6 +5,7 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import lombok.Data;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -22,7 +23,7 @@ public class User implements UserDetails {
     private String email;
     private String password;
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    @DBRef
     @JsonIgnore
     private List<Token> tokens;
 
