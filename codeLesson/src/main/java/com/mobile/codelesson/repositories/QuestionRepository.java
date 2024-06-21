@@ -6,5 +6,5 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 import java.util.List;
 
 public interface QuestionRepository extends MongoRepository<Question, String> {
-    List<Question> findAllByLessonId(String lessonId);
+    List<Question> findAllByLessonTitle(String LessonTitle);
 }

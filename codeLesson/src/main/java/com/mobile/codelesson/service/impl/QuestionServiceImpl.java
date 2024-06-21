@@ -23,13 +23,13 @@ public class QuestionServiceImpl implements QuestionService {
 
     @Override
     @Transactional(rollbackOn = Exception.class)
-    public void createQuestion(QuestionNewDTO question) {
+    public Question createQuestion(QuestionNewDTO question) {
         Question newQuestion = modelMapper.map(question, Question.class);
-        questionRepository.save(newQuestion);
+        return questionRepository.save(newQuestion);
     }
 
     @Override
-    public List<Question> getQuestionsByLessonId(String lessonId) {
-        return questionRepository.findAllByLessonId(lessonId);
+    public List<Question> getQuestionsByLessonId(String lessonTitle) {
+        return questionRepository.findAllByLessonTitle(lessonTitle);
     }
 }

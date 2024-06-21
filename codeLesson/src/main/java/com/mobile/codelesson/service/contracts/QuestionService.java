@@ -6,6 +6,6 @@ import com.mobile.codelesson.domain.entities.Question;
 import java.util.List;
 
 public interface QuestionService {
-    void createQuestion(QuestionNewDTO question);
+    Question createQuestion(QuestionNewDTO question);
     List<Question> getQuestionsByLessonId(String lessonId);
 }

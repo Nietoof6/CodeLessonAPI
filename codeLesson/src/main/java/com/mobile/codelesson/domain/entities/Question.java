@@ -18,5 +18,5 @@ public class Question {
     private String correctAnswer;
     private List<String> options;
 
-    private String lessonId;
+    private String lessonTitle;
 }
