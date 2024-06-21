@@ -13,7 +13,10 @@ public class Question {
     private String id;
     private Integer type;
     private String code;
+    private String hint;
     private String question;
     private String correctAnswer;
     private List<String> options;
+
+    private String lessonTitle;
 }
