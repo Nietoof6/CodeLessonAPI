@@ -96,6 +96,7 @@ public class UserServiceImpl implements UserService {
     @Transactional(rollbackOn = Exception.class)
     public void createUser(UserRegisterDTO user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setExp(0);
         User newUser = modelMapper.map(user, User.class);
         userRepository.save(newUser);
     }
