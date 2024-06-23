@@ -24,13 +24,14 @@ public class UserController {
     }
 
     @GetMapping("/profile")
-    public ResponseEntity<GeneralResponse> getProfile(@RequestParam("id") String id) {
+    public ResponseEntity<GeneralResponse> getProfile() {
         try {
-            UserShowProfileDTO user = userService.findByIdShowProfile(id);
+            User user = userService.findUserAuthenticated();
             if (user == null) {
                 return GeneralResponse.getResponse(HttpStatus.BAD_REQUEST, "User does not exist!");
             }
-            return GeneralResponse.getResponse(HttpStatus.OK, user);
+            UserShowProfileDTO userShowProfileDTO = modelMapper.map(user, UserShowProfileDTO.class);
+            return GeneralResponse.getResponse(HttpStatus.OK, userShowProfileDTO);
         } catch (Exception e) {
             return GeneralResponse.getResponse(HttpStatus.INTERNAL_SERVER_ERROR, "Internal server error!");
         }
