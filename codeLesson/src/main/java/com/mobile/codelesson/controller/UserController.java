@@ -3,8 +3,10 @@ package com.mobile.codelesson.controller;
 import com.mobile.codelesson.domain.dtos.req.UserPasswordDTO;
 import com.mobile.codelesson.domain.dtos.req.UserProfileDTO;
 import com.mobile.codelesson.domain.dtos.res.GeneralResponse;
+import com.mobile.codelesson.domain.dtos.res.UserShowProfileDTO;
 import com.mobile.codelesson.domain.entities.User;
 import com.mobile.codelesson.service.contracts.UserService;
+import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,9 +16,24 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
 
     private final UserService userService;
+    private final ModelMapper modelMapper;
 
-    public UserController(UserService userService) {
+    public UserController(UserService userService, ModelMapper modelMapper) {
         this.userService = userService;
+        this.modelMapper = modelMapper;
+    }
+
+    @GetMapping("/profile")
+    public ResponseEntity<GeneralResponse> getProfile(@RequestParam("id") String id) {
+        try {
+            UserShowProfileDTO user = userService.findByIdShowProfile(id);
+            if (user == null) {
+                return GeneralResponse.getResponse(HttpStatus.BAD_REQUEST, "User does not exist!");
+            }
+            return GeneralResponse.getResponse(HttpStatus.OK, user);
+        } catch (Exception e) {
+            return GeneralResponse.getResponse(HttpStatus.INTERNAL_SERVER_ERROR, "Internal server error!");
+        }
     }
 
     @PostMapping("/update-password")
@@ -43,6 +60,15 @@ public class UserController {
             }
             userService.updateProfile(user1, user);
             return GeneralResponse.getResponse(HttpStatus.OK, "Profile updated successfully!");
+        } catch (Exception e) {
+            return GeneralResponse.getResponse(HttpStatus.INTERNAL_SERVER_ERROR, "Internal server error!");
+        }
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<GeneralResponse> getAllUsers() {
+        try {
+            return GeneralResponse.getResponse(HttpStatus.OK, userService.findAll());
         } catch (Exception e) {
             return GeneralResponse.getResponse(HttpStatus.INTERNAL_SERVER_ERROR, "Internal server error!");
         }

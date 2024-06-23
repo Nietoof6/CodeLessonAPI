@@ -2,8 +2,12 @@ package com.mobile.codelesson.service.contracts;
 
 import com.mobile.codelesson.domain.dtos.req.UserProfileDTO;
 import com.mobile.codelesson.domain.dtos.req.UserRegisterDTO;
+import com.mobile.codelesson.domain.dtos.res.UserShowProfileDTO;
 import com.mobile.codelesson.domain.entities.Token;
 import com.mobile.codelesson.domain.entities.User;
+import jdk.dynalink.linker.LinkerServices;
+
+import java.util.List;
 
 public interface UserService {
     Token registerToken(User user) throws Exception;
@@ -16,5 +20,7 @@ public interface UserService {
     Boolean isPasswordOk(User user, String password);
     void updatePassword(User user, String password);
     User findById(String id);
+    UserShowProfileDTO findByIdShowProfile(String id);
     void updateProfile(User user, UserProfileDTO userProfileDTO);
+    List<User> findAll();
 }
