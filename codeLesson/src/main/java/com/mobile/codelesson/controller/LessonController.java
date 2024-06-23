@@ -66,8 +66,8 @@ public class LessonController {
         }
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<GeneralResponse> getLessonById(@PathVariable String id) {
+    @GetMapping("/get")
+    public ResponseEntity<GeneralResponse> getLessonById(@RequestParam("id") String id) {
         try {
             Lesson lesson = lessonService.getLessonById(id);
             if (lesson == null) {
