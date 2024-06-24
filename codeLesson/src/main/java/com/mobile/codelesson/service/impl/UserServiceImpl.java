@@ -109,10 +109,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional(rollbackOn = Exception.class)
-    public void updatePassword(User user, String password) {
+    public User updatePassword(User user, String password) {
         User user1 = userRepository.findById(user.getId()).orElse(null);
         user1.setPassword(passwordEncoder.encode(password));
-        userRepository.save(user1);
+        return userRepository.save(user1);
     }
 
     @Override
@@ -127,11 +127,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void updateProfile(User user, UserProfileDTO userProfileDTO) {
+    public User updateProfile(User user, UserProfileDTO userProfileDTO) {
         user.setName(userProfileDTO.getName());
         user.setLastName(userProfileDTO.getLastName());
         user.setEmail(userProfileDTO.getEmail());
-        userRepository.save(user);
+        return userRepository.save(user);
     }
 
     @Override

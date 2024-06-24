@@ -3,7 +3,9 @@ package com.mobile.codelesson.controller;
 import com.mobile.codelesson.domain.dtos.req.UserPasswordDTO;
 import com.mobile.codelesson.domain.dtos.req.UserProfileDTO;
 import com.mobile.codelesson.domain.dtos.res.GeneralResponse;
+import com.mobile.codelesson.domain.dtos.res.TokenDTO;
 import com.mobile.codelesson.domain.dtos.res.UserShowProfileDTO;
+import com.mobile.codelesson.domain.entities.Token;
 import com.mobile.codelesson.domain.entities.User;
 import com.mobile.codelesson.service.contracts.UserService;
 import org.modelmapper.ModelMapper;
@@ -41,14 +43,15 @@ public class UserController {
     public ResponseEntity<GeneralResponse> updatePassword(@RequestBody UserPasswordDTO user) {
 
         try {
-            User user1 = userService.findById(user.getId());
+            User user1 = userService.findUserAuthenticated();
             if (!userService.isPasswordOk(user1, user.getPassword())) {
                 throw new IllegalArgumentException("Invalid password!");
             }
-            userService.updatePassword(user1, user.getNewPassword());
-            return GeneralResponse.getResponse(HttpStatus.OK, "Password updated successfully!");
+            User newUser = userService.updatePassword(user1, user.getNewPassword());
+            Token token = userService.registerToken(newUser);
+            return GeneralResponse.getResponse(HttpStatus.OK, new TokenDTO(token));
         } catch (Exception e) {
-            return GeneralResponse.getResponse(HttpStatus.INTERNAL_SERVER_ERROR, "Internal server error!");
+            return GeneralResponse.getResponse(HttpStatus.INTERNAL_SERVER_ERROR, "Internal server error!" + e.getMessage());
         }
     }
 
@@ -59,8 +62,9 @@ public class UserController {
             if (user1 == null) {
                 return GeneralResponse.getResponse(HttpStatus.BAD_REQUEST, "User does not exist!");
             }
-            userService.updateProfile(user1, user);
-            return GeneralResponse.getResponse(HttpStatus.OK, "Profile updated successfully!");
+            User newUser = userService.updateProfile(user1, user);
+            Token token = userService.registerToken(newUser);
+            return GeneralResponse.getResponse(HttpStatus.OK, new TokenDTO(token));
         } catch (Exception e) {
             return GeneralResponse.getResponse(HttpStatus.INTERNAL_SERVER_ERROR, "Internal server error!");
         }

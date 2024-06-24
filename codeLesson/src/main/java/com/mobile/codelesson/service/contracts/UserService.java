@@ -18,9 +18,9 @@ public interface UserService {
     User findByemail(String email);
     void createUser(UserRegisterDTO user);
     Boolean isPasswordOk(User user, String password);
-    void updatePassword(User user, String password);
+    User updatePassword(User user, String password);
     User findById(String id);
     UserShowProfileDTO findByIdShowProfile(String id);
-    void updateProfile(User user, UserProfileDTO userProfileDTO);
+    User updateProfile(User user, UserProfileDTO userProfileDTO);
     List<User> findAll();
 }
