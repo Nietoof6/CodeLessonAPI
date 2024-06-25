@@ -1,5 +1,6 @@
 package com.mobile.codelesson.domain.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Id;
 import lombok.Data;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -9,6 +10,7 @@ import java.util.List;
 @Data
 @Document(collection = "questions")
 public class Question {
+    @JsonIgnore
     @Id
     private String id;
     private Integer type;
@@ -18,5 +20,6 @@ public class Question {
     private String correctAnswer;
     private List<String> options;
 
+    @JsonIgnore
     private String lessonTitle;
 }
