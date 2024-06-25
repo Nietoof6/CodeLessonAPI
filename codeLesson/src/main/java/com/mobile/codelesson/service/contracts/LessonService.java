@@ -1,6 +1,7 @@
 package com.mobile.codelesson.service.contracts;
 
 import com.mobile.codelesson.domain.dtos.req.LessonNewDTO;
+import com.mobile.codelesson.domain.dtos.res.LessonRecapDTO;
 import com.mobile.codelesson.domain.dtos.res.LessonTeoryDTO;
 import com.mobile.codelesson.domain.entities.Lesson;
 import com.mobile.codelesson.domain.entities.Question;
@@ -14,4 +15,5 @@ public interface LessonService {
     Lesson getLessonById(String id);
     Lesson getLessonByTitle(String title);
     LessonTeoryDTO TeoryById(String id);
+    LessonRecapDTO recapById(String id);
 }

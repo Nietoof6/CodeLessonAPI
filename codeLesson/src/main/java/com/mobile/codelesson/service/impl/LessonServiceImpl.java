@@ -1,6 +1,7 @@
 package com.mobile.codelesson.service.impl;
 
 import com.mobile.codelesson.domain.dtos.req.LessonNewDTO;
+import com.mobile.codelesson.domain.dtos.res.LessonRecapDTO;
 import com.mobile.codelesson.domain.dtos.res.LessonTeoryDTO;
 import com.mobile.codelesson.domain.entities.Lesson;
 import com.mobile.codelesson.domain.entities.Question;
@@ -65,5 +66,13 @@ public class LessonServiceImpl implements LessonService {
         LessonTeoryDTO lessonTeoryDTO = new LessonTeoryDTO();
         lessonTeoryDTO.setLesson(lesson.getLesson());
         return lessonTeoryDTO;
+    }
+
+    @Override
+    public LessonRecapDTO recapById(String id) {
+        Lesson lesson = lessonRepository.findById(id).orElse(null);
+        LessonRecapDTO lessonRecapDTO = new LessonRecapDTO();
+        lessonRecapDTO.setRecap(lesson.getRecap());
+        return lessonRecapDTO;
     }
 }
