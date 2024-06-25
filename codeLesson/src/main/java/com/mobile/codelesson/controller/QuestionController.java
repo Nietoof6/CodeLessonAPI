@@ -41,8 +41,8 @@ public class QuestionController {
         }
     }
 
-    @GetMapping("/all/{id}")
-    public ResponseEntity<GeneralResponse> getQuestionsByLessonId(@PathVariable String id) {
+    @GetMapping("/all")
+    public ResponseEntity<GeneralResponse> getQuestionsByLessonId(@RequestParam("id") String id) {
         try {
             List<Question> questions = questionService.getQuestionsByLessonId(id);
             return GeneralResponse.getResponse(HttpStatus.OK, questions);

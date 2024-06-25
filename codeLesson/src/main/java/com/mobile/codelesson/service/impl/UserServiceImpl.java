@@ -2,6 +2,8 @@ package com.mobile.codelesson.service.impl;
 
 import com.mobile.codelesson.domain.dtos.req.UserProfileDTO;
 import com.mobile.codelesson.domain.dtos.req.UserRegisterDTO;
+import com.mobile.codelesson.domain.dtos.res.UserExpDTO;
+import com.mobile.codelesson.domain.dtos.res.UserShowProfileDTO;
 import com.mobile.codelesson.domain.entities.Token;
 import com.mobile.codelesson.domain.entities.User;
 import com.mobile.codelesson.repositories.TokenRepository;
@@ -96,6 +98,7 @@ public class UserServiceImpl implements UserService {
     @Transactional(rollbackOn = Exception.class)
     public void createUser(UserRegisterDTO user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setExp(0);
         User newUser = modelMapper.map(user, User.class);
         userRepository.save(newUser);
     }
@@ -107,10 +110,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional(rollbackOn = Exception.class)
-    public void updatePassword(User user, String password) {
+    public User updatePassword(User user, String password) {
         User user1 = userRepository.findById(user.getId()).orElse(null);
         user1.setPassword(passwordEncoder.encode(password));
-        userRepository.save(user1);
+        return userRepository.save(user1);
     }
 
     @Override
@@ -119,11 +122,37 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void updateProfile(User user, UserProfileDTO userProfileDTO) {
+    public UserShowProfileDTO findByIdShowProfile(String id) {
+        User user = userRepository.findById(id).orElse(null);
+        return modelMapper.map(user, UserShowProfileDTO.class);
+    }
+
+    @Override
+    public User updateProfile(User user, UserProfileDTO userProfileDTO) {
         user.setName(userProfileDTO.getName());
         user.setLastName(userProfileDTO.getLastName());
         user.setEmail(userProfileDTO.getEmail());
-        userRepository.save(user);
+        return userRepository.save(user);
+    }
+
+    @Override
+    public List<User> findAll() {
+        return userRepository.findAll();
+    }
+
+    @Override
+    public UserExpDTO getExp(String id) {
+        User user = userRepository.findById(id).orElse(null);
+        UserExpDTO userExpDTO = new UserExpDTO();
+        userExpDTO.setEmail(user.getEmail());
+        userExpDTO.setExp(user.getExp());
+        return userExpDTO;
+    }
+
+    @Override
+    public User updateExp(User user, int exp) {
+        user.setExp(exp);
+        return userRepository.save(user);
     }
 
 }
