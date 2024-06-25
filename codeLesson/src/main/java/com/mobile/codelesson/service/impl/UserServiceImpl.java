@@ -2,6 +2,7 @@ package com.mobile.codelesson.service.impl;
 
 import com.mobile.codelesson.domain.dtos.req.UserProfileDTO;
 import com.mobile.codelesson.domain.dtos.req.UserRegisterDTO;
+import com.mobile.codelesson.domain.dtos.res.UserExpDTO;
 import com.mobile.codelesson.domain.dtos.res.UserShowProfileDTO;
 import com.mobile.codelesson.domain.entities.Token;
 import com.mobile.codelesson.domain.entities.User;
@@ -137,6 +138,21 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<User> findAll() {
         return userRepository.findAll();
+    }
+
+    @Override
+    public UserExpDTO getExp(String id) {
+        User user = userRepository.findById(id).orElse(null);
+        UserExpDTO userExpDTO = new UserExpDTO();
+        userExpDTO.setEmail(user.getEmail());
+        userExpDTO.setExp(user.getExp());
+        return userExpDTO;
+    }
+
+    @Override
+    public User updateExp(User user, int exp) {
+        user.setExp(exp);
+        return userRepository.save(user);
     }
 
 }

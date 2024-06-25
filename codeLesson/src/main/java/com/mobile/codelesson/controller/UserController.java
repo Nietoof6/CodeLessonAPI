@@ -1,9 +1,11 @@
 package com.mobile.codelesson.controller;
 
+import com.mobile.codelesson.domain.dtos.req.UserExpResDTO;
 import com.mobile.codelesson.domain.dtos.req.UserPasswordDTO;
 import com.mobile.codelesson.domain.dtos.req.UserProfileDTO;
 import com.mobile.codelesson.domain.dtos.res.GeneralResponse;
 import com.mobile.codelesson.domain.dtos.res.TokenDTO;
+import com.mobile.codelesson.domain.dtos.res.UserExpDTO;
 import com.mobile.codelesson.domain.dtos.res.UserShowProfileDTO;
 import com.mobile.codelesson.domain.entities.Token;
 import com.mobile.codelesson.domain.entities.User;
@@ -58,7 +60,7 @@ public class UserController {
     @PostMapping("update-profile")
     public ResponseEntity<GeneralResponse> updateProfile(@RequestBody UserProfileDTO user) {
         try {
-            User user1 = userService.findById(user.getId());
+            User user1 = userService.findUserAuthenticated();
             if (user1 == null) {
                 return GeneralResponse.getResponse(HttpStatus.BAD_REQUEST, "User does not exist!");
             }
@@ -74,6 +76,35 @@ public class UserController {
     public ResponseEntity<GeneralResponse> getAllUsers() {
         try {
             return GeneralResponse.getResponse(HttpStatus.OK, userService.findAll());
+        } catch (Exception e) {
+            return GeneralResponse.getResponse(HttpStatus.INTERNAL_SERVER_ERROR, "Internal server error!");
+        }
+    }
+
+    @GetMapping("/exp")
+    public ResponseEntity<GeneralResponse> getExp() {
+        try {
+            User user = userService.findUserAuthenticated();
+            if (user == null) {
+                return GeneralResponse.getResponse(HttpStatus.BAD_REQUEST, "User does not exist!");
+            }
+            UserExpDTO userExpDTO = userService.getExp(user.getId());
+            return GeneralResponse.getResponse(HttpStatus.OK, userExpDTO);
+        } catch (Exception e) {
+            return GeneralResponse.getResponse(HttpStatus.INTERNAL_SERVER_ERROR, "Internal server error!");
+        }
+    }
+
+    @PostMapping("/expUpdate")
+    public ResponseEntity<GeneralResponse> updateExp(@RequestBody UserExpResDTO userExpResDTO) {
+        try {
+            User user = userService.findUserAuthenticated();
+            if (user == null) {
+                return GeneralResponse.getResponse(HttpStatus.BAD_REQUEST, "User does not exist!");
+            }
+            User newUser = userService.updateExp(user, userExpResDTO.getExp());
+            Token token = userService.registerToken(newUser);
+            return GeneralResponse.getResponse(HttpStatus.OK, new TokenDTO(token));
         } catch (Exception e) {
             return GeneralResponse.getResponse(HttpStatus.INTERNAL_SERVER_ERROR, "Internal server error!");
         }
