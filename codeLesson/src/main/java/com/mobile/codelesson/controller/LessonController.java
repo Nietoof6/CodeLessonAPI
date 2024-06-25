@@ -2,6 +2,8 @@ package com.mobile.codelesson.controller;
 
 import com.mobile.codelesson.domain.dtos.req.LessonNewDTO;
 import com.mobile.codelesson.domain.dtos.res.GeneralResponse;
+import com.mobile.codelesson.domain.dtos.res.LessonRecapDTO;
+import com.mobile.codelesson.domain.dtos.res.LessonTeoryDTO;
 import com.mobile.codelesson.domain.dtos.res.LessonTitleDTO;
 import com.mobile.codelesson.domain.entities.Lesson;
 import com.mobile.codelesson.repositories.LessonRepository;
@@ -78,5 +80,35 @@ public class LessonController {
             return GeneralResponse.getResponse(HttpStatus.INTERNAL_SERVER_ERROR, "Internal server error!");
         }
     }
+
+    @GetMapping("/teory")
+    public ResponseEntity<GeneralResponse> getTeoryById(@RequestParam("id") String id){
+
+        try {
+            Lesson lesson = lessonService.getLessonById(id);
+            if (lesson == null){
+                return GeneralResponse.getResponse(HttpStatus.BAD_REQUEST, "Lesson does not exist!");
+            }
+            LessonTeoryDTO lessonTeory = lessonService.TeoryById(lesson.getId());
+            return GeneralResponse.getResponse(HttpStatus.OK, lessonTeory);
+        }catch (Exception e){
+            return GeneralResponse.getResponse(HttpStatus.INTERNAL_SERVER_ERROR, "Internal server error!");
+        }
+    }
+
+    @GetMapping("/recap")
+    public ResponseEntity<GeneralResponse> getRecapById(@RequestParam("id") String id){
+        try {
+            Lesson lesson = lessonService.getLessonById(id);
+            if (lesson == null){
+                return GeneralResponse.getResponse(HttpStatus.BAD_REQUEST, "Lesson does not exist");
+            }
+            LessonRecapDTO lessonRecapDTO = lessonService.recapById(lesson.getId());
+            return GeneralResponse.getResponse(HttpStatus.OK,lessonRecapDTO);
+        }catch (Exception e){
+            return GeneralResponse.getResponse(HttpStatus.INTERNAL_SERVER_ERROR, "Internal server error!");
+        }
+    }
+
 
 }
