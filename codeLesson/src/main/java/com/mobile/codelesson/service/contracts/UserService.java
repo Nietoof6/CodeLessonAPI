@@ -2,6 +2,7 @@ package com.mobile.codelesson.service.contracts;
 
 import com.mobile.codelesson.domain.dtos.req.UserProfileDTO;
 import com.mobile.codelesson.domain.dtos.req.UserRegisterDTO;
+import com.mobile.codelesson.domain.dtos.res.UserExpDTO;
 import com.mobile.codelesson.domain.dtos.res.UserShowProfileDTO;
 import com.mobile.codelesson.domain.entities.Token;
 import com.mobile.codelesson.domain.entities.User;
@@ -23,4 +24,6 @@ public interface UserService {
     UserShowProfileDTO findByIdShowProfile(String id);
     User updateProfile(User user, UserProfileDTO userProfileDTO);
     List<User> findAll();
+    UserExpDTO getExp(String id);
+    User updateExp(User user, int exp);
 }
